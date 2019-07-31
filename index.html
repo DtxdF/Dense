@@ -1,0 +1,280 @@
+<html lang="es">
+
+	<head>
+	
+		<title>Simple Geolocalizador IP: Densa - DtxdF</title>
+		<meta charset="UTF-8">
+		<script src="jquery-3.3.1.min.js"></script>
+
+		<script type="text/javascript">
+		
+			function win(data) {
+
+				if (data == 'error') {
+
+					main.innerHTML = '<span class="key">Hubo un error con la petición! ...</span>';
+				
+					return false;
+				
+				}
+			
+				try {
+				
+					json_data = JSON.parse(data);
+
+					as = json_data.as
+					country = json_data.country
+					countryCode = json_data.countryCode
+					isp = json_data.isp
+					lat = json_data.lat
+					lon = json_data.lon
+					org = json_data.org
+					region = json_data.region
+					regionName = json_data.regionName
+					timezone = json_data.timezone
+					query = json_data.query
+					city = json_data.city
+					googleMaps = `https://www.google.com/maps/place/${lat},${lon}/@${lat},${lon},16z`
+
+					main.innerHTML = `
+			<div class="line">
+				<span class="key">PAÍS: </span><span class="value">${country}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">CIUDAD: </span><span class="value">${city}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">ASOCIACIÓN: </span><span class="value">${as}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">CÓDIGO DEL PAÍS: </span><span class="value">${countryCode}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">PROVEEDOR DE SERVICIOS DE INTERNET: </span><span class="value">${isp}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">ORGANIZACIÓN: </span><span class="value">${org}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">REGIÓN: </span><span class="value">${region}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">NOMBRE DE LA REGIÓN: </span><span class="value">${regionName}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">ZONA HORARIA: </span><span class="value">${timezone}</span>
+			</div>
+			
+			<div class="line">
+				<span class="key">LATITUD: </span><span class="value">${lat}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">LONGITUD: </span><span class="value">${lon}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">Query: </span><span class="value">${query}</span>
+			</div>
+
+			<div class="line">
+				<span class="key">Google Maps: </span><span class="value"><a target="_blank" href="${googleMaps}">${googleMaps}</a></span>
+			</div>
+`;
+
+				} catch (err) {
+				
+					main.innerHTML = '<span class="key">Error cargando el contenido!. Asegurese que la codificación sea correcta. "application/json" en este caso. Mensaje de error: "'+err.message+'"</span>';
+				
+				}
+			
+			}
+
+			function error() {
+			
+				main.innerHTML = '<span class="key">Error conectando con la API!</span>';
+			
+			}
+
+			function loading() {
+			
+				main.innerHTML = '<span class="key">Cargando! ...</span>';
+			
+			}
+
+			window.onload = function() {
+			
+				menu = document.getElementById('main');
+				ip = document.getElementById('identificador');
+				form = document.getElementById('form');
+
+				menu.innerHTML = '<span class="key">No has hecho tu primera búsqueda ...</span>';
+
+				form.onsubmit = function() {
+
+					$.ajax({url:'geoip.php', type:'post', data:{host:ip.value}, success:win, beforeSend:loading, error:error});
+
+					return false;
+			
+				}
+
+			}
+		
+		</script>
+
+		<style type="text/css">
+		
+			* {
+			
+				word-wrap:break-word;
+				margin:0;
+			
+			}
+
+			body {
+			
+				background-color:black;
+				opacity:0.90;
+			
+			}
+
+			.header {
+			
+				background-color:lime;
+				width:100%;
+				height:15%;
+				border-bottom-left-radius:15pt;
+				border-bottom-right-radius:15pt;
+				border-bottom:4pt solid green;
+				padding-bottom:3pt;
+
+			}
+
+			.main {
+			
+				background-color:lime;
+				margin-top:15pt;
+				width:95%;
+				min-height:80%;
+				margin-left:auto;
+				margin-right:auto;
+				border:2pt solid green;
+				border-radius:10pt;
+			
+			}
+
+			.line {
+			
+				border-bottom:1pt solid black;
+				margin-top:5pt;
+			
+			}
+
+			.key, .value {
+			
+				margin-left:2pt;
+				font-family:Arial;
+
+			}
+
+			.key {
+			
+				font-weight:800;
+				font-size:2em;
+				color:black;
+				opacity:0.70;
+
+			}
+			
+			.value {
+			
+				font-size:1.5em;
+				color:blue;
+				float:right;
+				margin-right:5pt;
+			
+			}
+		
+			.myprofile {
+			
+				margin-left:2%;
+				margin-top:1%;
+				width:6%;
+				height:80%;
+				border-radius:50pt;
+			
+			}
+
+			.myprofile_string {
+			
+				color:green;
+				font-weight:900;
+			
+			}
+
+			.form {
+
+				width:100%;
+				height:10%;
+				margin-top:2%;
+			
+			}
+
+			.identificador {
+			
+				background-color:lime;
+				border:2pt solid green;
+				border-radius:5pt;
+				width:100%;
+				height:100%;
+				color:green;
+				font-weight:900;
+				font-size:2em;
+				margin-left:2.3pt;
+			
+			}
+
+			.identificador::placeholder {
+			
+				font-weight:900;
+				margin-left:2.3pt;
+				color:green;
+			
+			}
+
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="header">
+		
+			<img src="Ben-Kimim-Who-Am-I-03.jpg" class="myprofile">
+			<span class="myprofile_string">Jesús Daniel Colmenares (<a href="https://github.com/DtxdF" title="Mi perfil en Github">G:DtxdF</a>, <a href="https://underc0de.org/foro/profile/DtxdF" title="Mi perfil en Underc0de">U:DtxdF</a>)</span>
+		
+		</div>
+
+		<div class="form">
+
+			<form method="POST" id="form">
+		
+				<input type="text" class="identificador" id="identificador" placeholder="Dirección IP/Hostname">
+
+			</form>
+
+		</div>
+	
+		<div id="main" class="main"></div>
+	
+	</body>
+
+</html>
